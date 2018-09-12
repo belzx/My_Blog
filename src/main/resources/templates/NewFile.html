@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html, body, div, a{ margin: 0; padding: 0;}
+.container{ text-align: center;}
+ 
+/* 弹出框背景蒙板 */
+.modal-backdrop{ display: none; position: fixed; top: 0; right: 0; bottom: 0; left: 0; background-color: #000; opacity: .8; z-index: 1000;}
+ 
+/* 弹出框 */
+.modal-box{ display: none; position: fixed; top: 50%; margin-top: -100px; left: 50%; margin-left: -250px; text-align: center; width: 500px; height: 200px; background-color: #fff; -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; z-index:1100;}
+.modal-box .box-title{ margin: 40px 0; font-size: 18px; color: #000;}
+.modal-box .box-btn-sure{ display: block; margin: 0 auto; width: 200px; height: 50px; line-height:50px; font-size: 14px; color: #fff; background-color: #FD460D; -webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;}
+ 
+</style>
+<title>弹出框demo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="../static/assets/js/jquery-3.1.0.min.js"></script>
+            <script src="../static/assets/js/bootstrap.min.js"></script>
+            <script src="../static/assets/js/script.js"></script>
+            <script src="../static/assets/js/picture.js"></script>
+</head>
+<body>
+	<div class="container">
+		<a href="javascript:void(0);" title="点击按钮" id="btn_1">点我弹出框</a>		
+	</div>
+	<div class="modal-backdrop"></div>
+	<div class="modal-box">
+		<div class="box-title">这是一个弹出框</div>
+		<a href="javascript:void(0);" title="点击按钮" class="box-btn-sure" id="box-btn-sure">确 定</a>
+	</div>
+	<script type="text/javascript">
+		$("#btn_1").on("click", function(){
+			$(".modal-backdrop").css("display", "block");
+			$(".modal-box").css("display", "block");
+		});
+		$("#box-btn-sure").on("click", function(){
+			$(".modal-box").css("display", "none");
+			$(".modal-backdrop").css("display", "none");
+		});
+	</script>
+</body>
+</html>
