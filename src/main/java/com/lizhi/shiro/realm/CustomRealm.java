@@ -2,6 +2,7 @@ package com.lizhi.shiro.realm;
 
 import com.lizhi.bean.CacheUtils;
 import com.lizhi.bean.User;
+import com.lizhi.service.RedisService;
 import com.lizhi.shiro.realm.dao.UserDao;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -13,6 +14,8 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import java.util.HashSet;
@@ -25,6 +28,9 @@ import java.util.Set;
  *
  */
 public class CustomRealm extends AuthorizingRealm {
+
+	private static Logger log = LoggerFactory.getLogger(CustomRealm.class);
+
 	@Resource
 	private UserDao userDao;
 	{
@@ -47,7 +53,7 @@ public class CustomRealm extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
 			throws AuthenticationException {
-		// 从主体穿过来的信息中，获取用户名
+		// 从主体传过来的信息中，获取用户名
 		String userName = (String) authenticationToken.getPrincipal();
 
 		// 通过用户名到数据库中获取凭证
@@ -61,85 +67,22 @@ public class CustomRealm extends AuthorizingRealm {
 		return simpleAuthenticationInfo;
 	}
 
-	/**
-	 * 获取角色
-	 * 
-	 * @param userName
-	 * @return
-	 */
+
 	private Set<String> getRolesByUserName(String userName) {
-		// 先从cache中获取
-		User userByCache = getUserByCahe(userName);
-		if (userByCache != null && userByCache.getRole() != null) {
-			System.out.println("从cache中获取角色");
-			return userByCache.getRole();
-		}
-
-		System.out.println("从数据库中获取获取角色");
-		List<String> list = userDao.queryRolesByUserName(userName);
-		Set<String> set = new HashSet(list);
-
-		if (userByCache != null && userByCache.getRole() == null) {
-			// 将获取的角色放到cache中
-			userByCache.setRole(set);
-			return set;
-		} 
-		return set;
+		User user = userDao.getUser(userName);
+		return  user == null ? null: user.getRole();
 	}
 
-	/**
-	 * 获取权限
-	 * 
-	 * @param userName
-	 * @return
-	 */
 	private Set<String> getPermissionByUserName(String userName) {
-		// 先从cache中获取
-		User userByCache = getUserByCahe(userName);
-		if (userByCache != null && userByCache.getPermission() != null) {
-			System.out.println("从cache中获取权限");
-			return userByCache.getPermission();
-		}
-
-		System.out.println("从数据库中获取获取权限");
-		Set<String> roles = getRolesByUserName(userName);
-		Set<String> set = new HashSet();
-		for (String role : roles) {
-			List<String> list = userDao.queryPermissionByUserName(role);
-			set.addAll(list);
-		}
-		if (userByCache != null && userByCache.getPermission() == null) {
-			// 将获取的权限放到cache中
-			userByCache.setPermission(set);
-			return set;
-		}
-		return set;
-
+		User user = userDao.getUser(userName);
+		return  user == null ? null: user.getPermission();
 	}
 
 	public String getPasswordByuserName(String userName) {
-		// 先从cache中获取
-		User userByCache = getUserByCahe(userName);
-		if (userByCache != null) {
-			System.out.println("从cache中获取密码");
-			return userByCache.getPassword();
-		}
-		System.out.println("从dao中获取密码");
-		User user = userDao.getPasswordByuserName(userName);
-		if (user == null) {
-			return null;
-		}
-		return user.getPassword();
+		User user = userDao.getUser(userName);
+		return  user == null? null:user.getPassword();
 	}
 
-	public static void main(String[] args) {
-		Md5Hash mark = new Md5Hash("123456", "Mark");
-		System.out.println(mark.toString());
-	}
 
-	private User getUserByCahe(String userName) {
-		// 先从cache中获取
-		User userByCache = (User) CacheUtils.getObjectMap(new Md5Hash(userName).toString());
-		return userByCache;
-	}
+
 }

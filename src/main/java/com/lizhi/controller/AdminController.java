@@ -1,6 +1,7 @@
 package com.lizhi.controller;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
@@ -8,11 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.lizhi.service.RedisService;
+import com.lizhi.shiro.realm.dao.UserDaoImpl;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +40,10 @@ import com.lizhi.shiro.realm.dao.UserDao;
 @Controller
 public class AdminController {
 
+	private static Logger log = LoggerFactory.getLogger(AdminController.class);
+
+	public static  final String SESSION_KEY = "session%s";
+
 	@Resource
 	private DefaultWebSecurityManager securityManager;
 	
@@ -43,7 +52,9 @@ public class AdminController {
 	
 	@Resource
 	private IImageService imageService;
-	
+
+	@Resource
+	private RedisService redisService;
 
 	@Value("${test.url}")
 	private String Hosturl;
@@ -94,50 +105,28 @@ public class AdminController {
 	 */
 	@RequestMapping(value = "/admin/login", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
 	public void subLogin(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String sep = request.getLocalAddr();
 		HttpSession session = request.getSession();
-		String sessionId = "sessionId:"+session.getId();
 		request.getServletContext().setAttribute("Hosturl", Hosturl);
 		try {
-			User daoUser = userDao.getPasswordByuserName(user.getUsername());
-			System.out.println(daoUser.getId());
-			//登陆之后将session放入到cache中
-			CacheUtils.addSession(sessionId,session);
-			
 			//开始验证登录
-			Subject subject = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
 			// token.setRememberMe(user.isRemenberMe());
+			Subject subject = SecurityUtils.getSubject();
 			subject.login(token);
-			user.setPassword(new Md5Hash(user.getPassword(),user.getUsername()).toString());
-			System.out.println("登录成功"+daoUser);
-			
+			user = userDao.getUser(user.getUsername());
 			//获取头像图片地址
-			TFile tFileByCreatorId = imageService.getTFileByCreatorIdAndType(daoUser.getId(),FileType.FILE_TYPE_ICO);
-			String ico = tFileByCreatorId == null ? "assets/images/logo.png":tFileByCreatorId.getFileUrl();
-			
-			User user2 = new User();
-			user2.setId(daoUser.getId());
-			user2.setUsername(user.getUsername());
-			user2.setIco(ico);
-			session.setAttribute("user", user2);
-			
-			
-			
-			//登陆之后将session放入到cache中
-			CacheUtils.addSession(sessionId,session);
-			
-			//登陆后将user放入cahe中
-			CacheUtils.setObjectMap(new Md5Hash(user.getUsername()).toString(),user);
-			
-			subject.checkRoles("admin");
-			if (subject.hasRole("admin")) {
-
-			}
+			TFile tFileByCreatorId = imageService.getTFileByCreatorIdAndType(user.getId(),FileType.FILE_TYPE_ICO);
+			user.setIco(tFileByCreatorId == null ? "assets/images/logo.png":tFileByCreatorId.getFileUrl());
+			session.setAttribute("user",user);
+//			redisService.set(SESSION_KEY+session.getId(),session);
+//			subject.checkRoles("admin");
+//			if (subject.hasRole("admin")) {
+//
+//			}
 		} catch (Exception e) {
 			//cache中的session删除
-			CacheUtils.cleanSession(sessionId);
-			System.out.println(e.getMessage());
+			redisService.remove(UserDaoImpl.USER_KEY+user.getUsername());
+			log.error("Exception:",e);
 		}
 		/**
 		 * 注意： "redirect:"后面跟着的是"/"和不跟着"/"是不一样的： 1) "redirect:"后面跟着"/"：
@@ -149,7 +138,6 @@ public class AdminController {
 	/**
 	 * 注销登录入口
 	 * 
-	 * @param user
 	 * @return
 	 * @throws IOException
 	 */
@@ -161,19 +149,16 @@ public class AdminController {
 		if(username == null) {
 			return;
 		}
-		
 		//session 中user删除
 		session.removeAttribute("user");
-		
 		//cache中的session删除
-		CacheUtils.cleanSession(sessionId);
-		
+		redisService.remove(UserDaoImpl.USER_KEY+username);
 		try {
 			Subject subject = SecurityUtils.getSubject();
 			subject.logout();
-			System.out.println("注销成功");
+			log.warn("注销登录：{}",username);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			log.error("Exception:",e);
 		}
 		/**
 		 * 注意： "redirect:"后面跟着的是"/"和不跟着"/"是不一样的： 1) "redirect:"后面跟着"/"：

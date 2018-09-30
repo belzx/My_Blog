@@ -1,7 +1,11 @@
 package com.lizhi.shiro.realm.dao;
 
 import com.lizhi.bean.User;
+import com.lizhi.service.RedisService;
+import com.lizhi.shiro.realm.CustomRealm;
 import org.apache.shiro.util.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -9,9 +13,18 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+
 @Component
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl implements com.lizhi.shiro.realm.dao.UserDao {
+
+    private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class);
+
+    public static final String USER_KEY = "1234567890123:%s";
+
+    @Resource
+    private RedisService redisService;
 
     @Resource
     private JdbcTemplate jdbcTemplate;
@@ -19,7 +32,7 @@ public class UserDaoImpl implements UserDao {
     public User getPasswordByuserName(String userName) {
         String sql = "SELECT id,username,password from users WHERE username = ? ";
 
-        List<User> list = jdbcTemplate.query(sql, new String[]{userName},new RowMapper<User>() {
+        List<User> list = jdbcTemplate.query(sql, new String[]{userName}, new RowMapper<User>() {
             public User mapRow(ResultSet resultSet, int i) throws SQLException {
                 User user = new User();
                 user.setId(Integer.valueOf(resultSet.getString("id")));
@@ -28,7 +41,7 @@ public class UserDaoImpl implements UserDao {
                 return user;
             }
         });
-        if(CollectionUtils.isEmpty(list)){
+        if (CollectionUtils.isEmpty(list)) {
             return null;
         }
         return list.get(0);
@@ -53,5 +66,38 @@ public class UserDaoImpl implements UserDao {
                 return resultSet.getString("permission");
             }
         });
+    }
+
+    @Override
+    public User getUser(String userName) {
+        User user;
+        try {
+            user = (User) redisService.get(USER_KEY + userName);
+            if (user != null) {
+                if (user.getId() == null) {
+                    redisService.remove(USER_KEY + userName);
+                    user = getPasswordByuserName(userName);
+                }else{
+
+                }
+            } else {
+                user = getPasswordByuserName(userName);
+            }
+            if (user == null) {
+                log.info("没有角色");
+                return null;
+            }
+            user.setPermission(new HashSet<String>(queryPermissionByUserName(userName)));
+            user.setRole(new HashSet<String>(queryRolesByUserName(userName)));
+            redisService.set(USER_KEY + userName, user);
+            log.error("getuser :{}", user.toString());
+        } catch (
+                Exception e)
+
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return user;
     }
 }

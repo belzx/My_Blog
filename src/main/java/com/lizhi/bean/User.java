@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 public class User implements Serializable,Cloneable{
+	private static final long serialVersionUID = -5809782578272943999L;
 	private Integer id;
 	private String username;
     private String password;
@@ -87,4 +88,18 @@ public class User implements Serializable,Cloneable{
     public void setPassword(String password) {
         this.password = password;
     }
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", remenberMe=" + remenberMe +
+				", salt='" + salt + '\'' +
+				", role=" + role +
+				", permission=" + permission +
+				", ico='" + ico + '\'' +
+				'}';
+	}
 }

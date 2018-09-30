@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.lizhi.bean.*;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -18,10 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lizhi.bean.FileURLs;
-import com.lizhi.bean.ResponseBean;
-import com.lizhi.bean.TFile;
-import com.lizhi.bean.User;
 import com.lizhi.common.FileUtil;
 import com.lizhi.common.FileUtilTX;
 import com.lizhi.service.IImageService;

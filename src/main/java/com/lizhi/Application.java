@@ -10,15 +10,11 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * Created by xinghailong on 2017/7/21.
  */
-/*@Configuration
-@EnableAutoConfiguration
-@ComponentScan*/
 @EnableScheduling//启动定时任务配置
 @SpringBootApplication
 //指定扫描的mapper接口所在的包
-@MapperScan("com.lizhi.mybatis.mapper")
+@MapperScan(basePackages ="com.lizhi.mybatis.mapper")
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

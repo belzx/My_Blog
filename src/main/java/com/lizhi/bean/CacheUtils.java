@@ -12,11 +12,13 @@ import javax.servlet.http.HttpSession;
 
 public class CacheUtils {
 	private Object obj;
+
 	private static Map<String,Object> map = new HashMap();
+
 	private int times;//系统里面保存的时间
 	
 	private int saveTime;//系统里面保存时间戳
-	
+
 	public Object getObj() {
 		return obj;
 	}
@@ -51,7 +53,6 @@ public class CacheUtils {
 			if(next.getValue() instanceof HttpSession) {
 				iterator.remove();
 			}
-			
 		}
 	}
 	
