@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import com.lizhi.config.shiro.RedisSessionSharedConfig;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -16,7 +18,6 @@ import org.springframework.stereotype.Service;
  * redicache 工具类
  *
  */
-@SuppressWarnings("unchecked")
 @Service
 public class RedisService {
     /**
@@ -25,12 +26,10 @@ public class RedisService {
      * redisTemplate.opsForList();//操作list
      * redisTemplate.opsForSet();//操作set
      * redisTemplate.opsForZSet();//操作有序set
-     *
-     * 简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
      */
-    @SuppressWarnings("rawtypes")
     @Autowired
     private RedisTemplate redisTemplate;
+
     /**
      * 批量删除对应的value
      *
@@ -107,6 +106,48 @@ public class RedisService {
         }
         return true;
     }
+
+    public boolean existsSession(Session session){
+        try {
+          return  exists(RedisSessionSharedConfig.REDISSESSIONDAO_PREFIX + session.getId().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void deleteSession(Session session){
+        try {
+            remove(RedisSessionSharedConfig.REDISSESSIONDAO_PREFIX + session.getId().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateSessionTimeOut(Session session){
+        try {
+            expire(RedisSessionSharedConfig.REDISSESSIONDAO_PREFIX+session.getId().toString(), RedisSessionSharedConfig.REDISSESSIONDAO_EXPIRETIME, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setSession(Session session){
+        try {
+            redisTemplate.opsForValue().set(RedisSessionSharedConfig.REDISSESSIONDAO_PREFIX+session.getId(),session,RedisSessionSharedConfig.REDISSESSIONDAO_EXPIRETIME,TimeUnit.SECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Session getSession(String  sessionid){
+        try {
+          return  (Session)get(RedisSessionSharedConfig.REDISSESSIONDAO_PREFIX+sessionid);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     /**
      * 写入缓存
      *
@@ -136,6 +177,10 @@ public class RedisService {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public  boolean expire(String key,int expireTime,TimeUnit timeUnit) {
+      return  redisTemplate.expire(key, RedisSessionSharedConfig.REDISSESSIONDAO_EXPIRETIME, TimeUnit.SECONDS);
     }
 
     public  Map<String,String> hmget(String key) {
@@ -178,26 +223,4 @@ public class RedisService {
             return null;
         }
     }
-
-//    public void multiSetAll(Map<String,Object> map){
-//        redisTemplate.opsForValue().multiSet(map);
-//    }
-//
-//    public void multiSet(String key,Object object){
-//        Map<String, Object> objectObjectHashMap = new HashMap();
-//        objectObjectHashMap.put(key,object);
-//        redisTemplate.opsForValue().multiSet(objectObjectHashMap);
-//    }
-//
-//    public List<Object> multiGetAll(List<String> keys){
-//       return redisTemplate.opsForValue().multiGet( keys);
-//    }
-//    public Object multiGet(String key){
-//        List<Object> list = redisTemplate.opsForValue().multiGet(Arrays.asList(key));
-//        if(null == list || list.isEmpty()){
-//            return  null;
-//        }
-//        return  list.get(0);
-//    }
-
 }

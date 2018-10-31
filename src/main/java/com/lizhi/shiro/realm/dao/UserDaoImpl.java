@@ -35,7 +35,7 @@ public class UserDaoImpl implements com.lizhi.shiro.realm.dao.UserDao {
         List<User> list = jdbcTemplate.query(sql, new String[]{userName}, new RowMapper<User>() {
             public User mapRow(ResultSet resultSet, int i) throws SQLException {
                 User user = new User();
-                user.setId(Integer.valueOf(resultSet.getString("id")));
+                user.setId(resultSet.getString("id"));
                 user.setUsername(resultSet.getString("username"));
                 user.setPassword(resultSet.getString("password"));
                 return user;
@@ -77,27 +77,31 @@ public class UserDaoImpl implements com.lizhi.shiro.realm.dao.UserDao {
                 if (user.getId() == null) {
                     redisService.remove(USER_KEY + userName);
                     user = getPasswordByuserName(userName);
+//                    log.info("从dao中获取user");
                 }else{
-
+//                    log.info("从redis中获取user");
                 }
             } else {
+//                log.info("从dao中获取user");
                 user = getPasswordByuserName(userName);
             }
             if (user == null) {
-                log.info("没有角色");
+                log.warn("没有角色");
                 return null;
             }
             user.setPermission(new HashSet<String>(queryPermissionByUserName(userName)));
             user.setRole(new HashSet<String>(queryRolesByUserName(userName)));
             redisService.set(USER_KEY + userName, user);
             log.error("getuser :{}", user.toString());
-        } catch (
-                Exception e)
-
-        {
+        } catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         return user;
+    }
+
+    @Override
+    public void clearCaheUser(String userName) {
+         redisService.remove(USER_KEY + userName);
     }
 }

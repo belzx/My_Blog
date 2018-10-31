@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lizhi.mapper.BlogArticleMapper">
+    <resultMap id="SingleResultMap" type="com.lizhi.bean.BlogArticle">
+        <result column="id" property="id" javaType="String" jdbcType="VARCHAR"/>
+        <result column="title" property="title" javaType="String" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result column="author" property="author" javaType="String" jdbcType="VARCHAR"/>
+        <result column="link" property="link" javaType="int" jdbcType="INTEGER"/>
+        <result column="count" property="count" javaType="int" jdbcType="INTEGER"/>
+        <result column="content" property="content" javaType="String" jdbcType="VARCHAR"/>
+        <result column="deleted" property="deleted" javaType="int" jdbcType="INTEGER"/>
+        <result column="blogLabelId" property="blogLabelId" javaType="String" jdbcType="VARCHAR"/>
+        <result column="description" property="description" javaType="String" jdbcType="VARCHAR"/>
+        <association column="blogLabelId" property="blogLabel" select="com.lizhi.mapper.BlogLabelMapper.selectByPK">
+        </association>
+    </resultMap>
+<cache></cache>
+
+    <!--用于动态生成sql所需的配置-->
+    <sql id="config">
+        <bind name="resultMapId" value="'SingleResultMap'"/>
+        <bind name="tableName" value="'t_blog_article'"/>
+    </sql>
+
+    <select id="selectByDateYM" resultType="java.util.HashMap">
+
+    select   date_format(createTime, '%Y' ) as createY ,DATE_FORMAT(createTime,'%m') as createM,count(0) as count
+    from t_blog_article
+
+    group by date_format(createTime, '%Y-%m')
+    ORDER BY date_format(createTime, '%Y-%m') desc
+    limit 0,5
+
+ </select>
+    <insert id="insert" parameterType="com.lizhi.bean.BlogArticle">
+        <include refid="config"/>
+        <include refid="BasicMapper.buildInsertSql"/>
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        <include refid="config"/>
+        <include refid="BasicMapper.buildBatchInsertSql"/>
+    </insert>
+
+    <delete id="deleteByPK">
+        delete from t_blog_article where id =#{id}
+    </delete>
+
+    <select id="selectByPK" resultMap="SingleResultMap">
+		select * from t_blog_article where id = #{id}
+	</select>
+
+    <delete id="delete" parameterType="com.lizhi.bean.BlogArticle">
+        <include refid="config"/>
+        <include refid="BasicMapper.buildDeleteSql"/>
+    </delete>
+
+    <update id="update" parameterType="com.lizhi.bean.BlogArticle">
+        <include refid="config"/>
+        <include refid="BasicMapper.buildUpdateSql"/>
+    </update>
+
+    <select id="query" parameterType="com.lizhi.bean.BlogArticle" resultMap="SingleResultMap">
+        <include refid="config"/>
+        <include refid="BasicMapper.buildSelectSql"/>
+    </select>
+
+    <select id="count" parameterType="com.lizhi.bean.BlogArticle" resultType="int">
+        <include refid="config"/>
+        <include refid="BasicMapper.buildTotalSql"/>
+    </select>
+
+    <select id="selectByJoin"  resultMap="SingleResultMap">
+        select *
+        from t_blog_article tba
+        join t_blog_label tbl on tba.blogLabelId = tbl.id
+        where  1=1
+        <if test = " createTimeByMonth != null and createTimeByMonth != '' ">
+            AND date_format(tba.createTime, '%Y-%m') = #{createTimeByMonth}
+        </if>
+
+        <if test = " labelparentId != null and labelparentId != '' ">
+            AND tbl.parentId = #{labelparentId}
+        </if>
+        AND deleted = 0
+        order by tba.createTime desc
+        <if test = " pageIndex >= 0 and pageSize > 0 ">
+            limit #{pageIndex},#{pageSize}
+        </if>
+    </select>
+
+    <select id="countByJoin" resultType="int">
+        select count(*)
+        from t_blog_article tba
+        join t_blog_label tbl on tba.blogLabelId = tbl.id
+        where  1=1
+        <if test = " createTimeByMonth != null and createTimeByMonth != '' ">
+            AND date_format(tba.createTime, '%Y-%m') = #{createTimeByMonth}
+        </if>
+
+        <if test = " labelparentId != null and labelparentId != '' ">
+            AND tbl.parentId = #{labelparentId}
+        </if>
+        AND deleted = 0
+    </select>
+
+</mapper>

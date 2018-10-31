@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lizhi.mapper.TFileMapper">
+  <resultMap id="TFileResultMap" type="com.lizhi.bean.TFile">
+    <result column="id"  property="id" jdbcType="VARCHAR" javaType="String" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="file_type" jdbcType="VARCHAR" property="fileType" />
+    <result column="md5" jdbcType="VARCHAR" property="md5" />
+    <result column="creator_userid" jdbcType="VARCHAR" property="creatorUserid" />
+    <result column="linknum" jdbcType="INTEGER" property="linknum" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+  </resultMap>
+
+  <!--用于动态生成sql所需的配置-->
+  <sql id="config">
+    <bind name="resultMapId" value="'TFileResultMap'"/>
+    <bind name="tableName" value="'t_file'"/>
+  </sql>
+
+  <insert id="insert" parameterType="com.lizhi.bean.TFile">
+    <include refid="config"/>
+    <include refid="BasicMapper.buildInsertSql"/>
+  </insert>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+    <include refid="config"/>
+    <include refid="BasicMapper.buildBatchInsertSql"/>
+  </insert>
+
+  <delete id="deleteByPK" >
+        delete from t_file where id =#{id}
+    </delete>
+
+  <select id="selectByPK"  resultMap="TFileResultMap">
+		select * from t_file where id = #{id}
+	</select>
+
+  <delete id="delete" parameterType="com.lizhi.bean.TFile">
+    <include refid="config"/>
+    <include refid="BasicMapper.buildDeleteSql"/>
+  </delete>
+
+  <update id="update" parameterType="com.lizhi.bean.TFile">
+    <include refid="config"/>
+    <include refid="BasicMapper.buildUpdateSql"/>
+  </update>
+
+  <select id="query" parameterType="com.lizhi.bean.TFile" resultMap="TFileResultMap">
+    <include refid="config"/>
+    <include refid="BasicMapper.buildSelectSql"/>
+  </select>
+
+  <select id="count" parameterType="com.lizhi.bean.TFile" resultType="int">
+    <include refid="config"/>
+    <include refid="BasicMapper.buildTotalSql"/>
+  </select>
+</mapper>

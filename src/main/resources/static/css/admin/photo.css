@@ -1,0 +1,163 @@
+.wrap-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1540907459&di=f034739af17715ae4ebede579ed119a5&imgtype=jpg&src=http%3A%2F%2Fimg6.bdstatic.com%2Fimg%2Fimage%2Fpublic%2Fdaqian22.jpg');
+    height: 270px;
+    background-size: cover;
+    padding-top: 0;
+}
+
+.wrap-pagenation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.wrap-image input {
+    outline: none;
+    border: none;
+    background: transparent;
+    padding-left: 10px;
+    width: 340px;
+    color: white;
+}
+
+.wrap-input {
+    padding: 2px;
+    border: 2px solid white;
+    border-radius: 3px;
+    width: 400px;
+    padding-bottom: 4px;
+    position: relative;
+}
+
+.wrap-input img {
+    cursor: pointer;
+    position: absolute;
+    top: 6px;
+    right: 19px;
+    width: 15px;
+}
+
+.wrap-list-image {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.wrap-list-image li {
+    list-style: none;
+    width: 22%;
+    height: 200px;
+    margin: 12px;
+    position: relative;
+}
+
+.wrap-list-image li svg {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    right: 5px;
+    top: 5px;
+    cursor: pointer;
+}
+
+.wrap-list-image li img {
+    width: 100%;
+    height: 100%;
+}
+
+.wrap-list-image li span svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    animation: spin 1s linear infinite;
+    display: none;
+}
+
+@keyframes spin {
+    from {
+        transform: translateX(-50%) translateY(-50%) rotate(0deg);
+    }
+
+    to {
+        transform: translateX(-50%) translateY(-50%) rotate(360deg);
+    }
+}
+
+#uplodpicture {
+    position: absolute;
+    top: 1px;
+    width: 83px;
+    right: -96px;
+}
+
+/* 弹出框背景蒙板 */
+
+.modal-backdrop-picture {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+    opacity: .8;
+    z-index: 10000;
+}
+
+.btn3 {
+    margin-top: 30px;
+    padding: 10px 20px;
+    height: 45px;
+    font-size: 16px;
+}
+
+.upload-img {
+    margin-bottom: 35px;
+    margin-top: 20px;
+}
+/*div 在另外一个div中居中**/
+.center{
+    margin: 0 auto;
+}
+/* 弹出框 */
+
+.modal-box {
+    display: none;
+    position: fixed;
+    top: 50%;
+    margin-top: -100px;
+    left: 50%;
+    margin-left: -250px;
+    text-align: center;
+    width: 500px;
+    height: 200px;
+    background-color: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    z-index: 11000;
+}
+
+.modal-box .box-title {
+    margin: 40px 0;
+    font-size: 18px;
+    color: #000;
+}
+
+.modal-box .box-btn-sure {
+    display: block;
+    margin: 0 auto;
+    width: 50px;
+    height: 20px;
+    line-height: 50px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #FD460D;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}

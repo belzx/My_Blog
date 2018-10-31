@@ -9,11 +9,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @Description 自定义异常页面配置类
- * @author zhangyd
- * @date 2017年3月15日 下午3:13:43 
- * @version V1.0
- * @since JDK ： 1.7
- * @modify                 
+ * @modify
  * @Review
  */
 @Component
@@ -32,6 +28,9 @@ public class AppErrorPagesConfiguration {
 				configurableEmbeddedServletContainer.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/error/400"));
 				configurableEmbeddedServletContainer.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/500"));
 				configurableEmbeddedServletContainer.addErrorPages(new ErrorPage(java.lang.Throwable.class, "/error/500"));
+
+				//        //10分钟session过期
+//        configurableEmbeddedServletContainer.setSessionTimeout(10,TimeUnit.MINUTES);
 			}
 		};
 	}

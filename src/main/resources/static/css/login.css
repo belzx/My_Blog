@@ -1,0 +1,124 @@
+/*!*登录页面*!*/
+ /*.login_kuang{ position:relative; top:50%; left:50%; width:512px; height:250px; margin-left:0px; }*/
+ /*.zc{ width:512px; height:auto;}*/
+ /*.zc .bj_bai{ float:left; width:261px; height:256px; padding-left:38px; background:#FFF;}*/
+/*.login_kuang  h3{ font:16px/70px "微软雅黑", "黑体"; color:#37b5f9; width:270px; text-align:left;}*/
+/*.login_kuang .zc .bj_right{ float:left;width:173px; height:256px; padding-left:37px; background:#f8f8f8;}*/
+ /*.kuang_txt{ width:220px; height:32px; border:1px solid #dddddd; background:#faffbd; line-height:32px; padding-left:4px; color:#b1a9a9;  margin-bottom:10px; }*/
+ /*.login_kuang .zc .bj_bai a{ color:#37b5f9; float:right; margin-right:35px;}*/
+/*.btn_zhuce{ width:227px; height:33px; background:#37b5f9; font-size:14px; line-height:33px; text-align:center; border:0px; color:#fff; border-radius:3px; cursor:pointer;}*/
+/*.btn_zhuce:hover,.login_qita_kuang .zc .left .btn_zhuce:hover{ background:#0065d0;}*/
+/*!*.wrap-header {*!*/
+ /*!*display: flex;*!*/
+  /*!*justify-content: space-around;*!*/
+/*!*}*!*/
+.backgroud_login_body {
+ background: #ccc;
+ background-image: url("http://mat1.gtimg.com/gamezone/0309/000000002.gif");
+ background-repeat: no-repeat;
+ background-size: cover;
+}
+.wrap-h3 {
+ display: flex;
+ justify-content: space-between;
+}
+
+.wrap-h3 h3 {
+ cursor: pointer;
+}
+
+.inner_backgroud_login_body {
+ display: flex;
+ flex-direction: row-reverse;
+}
+
+/* .wrap-h3 h3:hover {
+  color: red;
+} */
+
+.wrap {
+ background: white;
+ padding: 30px;
+ width: 400px;
+ margin: 50px;
+}
+.input {
+ height: 45px;
+ line-height: 45px;
+ width: 100%;
+ background: rgb(250, 255, 189);
+ display: block;
+ padding-left: 20px;
+ box-sizing: border-box;
+}
+.login-message {
+ color: blue;
+ margin: 10px 0;
+}
+.btn {
+ width: 100%;
+ background: #c70000;
+ height: 45px;
+ line-height: 32px;
+ text-align: center;
+ border-radius: 16px;
+ color: white;
+ cursor: pointer;
+ font-weight:bold;
+}
+
+.wrap-bt {
+ display: flex;
+ justify-content: space-between;
+ margin: 15px 0;
+}
+
+.checkbox-text {
+ position: relative;
+ left: -118px;
+
+}
+
+.forget-password {
+ color: blue;
+ text-align: center;
+}
+
+.wrap-register {
+ display: none;
+}
+
+.wrap-register input {
+ display: block;
+ height:35px;
+ line-height: 35px;
+ border-radius: 4px;
+ width: 100%;
+ margin: 20px 0;
+ border-color: none;
+ -webkit-appearance: none;
+ box-sizing: border-box;
+}
+
+.icon {
+ width: 18px;
+ height: 18px;
+}
+
+.f-input {
+ position: relative;
+}
+
+.f-input img {
+ position: absolute;
+ top: 8px;
+ left: 8px;
+}
+
+.f-input input {
+ padding-left: 35px;
+}
+
+.btn:last-child {
+ margin: 30px 0;
+}

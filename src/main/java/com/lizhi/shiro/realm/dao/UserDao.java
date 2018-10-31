@@ -10,4 +10,5 @@ public interface UserDao {
     List<String> queryRolesByUserName(String userName);
     List<String> queryPermissionByUserName(String Role);
     User getUser(String userName);
+    void clearCaheUser(String userName);
 }

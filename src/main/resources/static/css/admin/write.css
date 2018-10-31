@@ -1,0 +1,68 @@
+
+/* 弹出框背景蒙板 */
+
+.modal-backdrop-picture {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+    opacity: .8;
+    z-index: 10000;
+}
+
+.btn3 {
+    margin-top: 30px;
+    padding: 10px 20px;
+    height: 45px;
+    font-size: 16px;
+}
+
+.upload-img {
+    margin-bottom: 35px;
+    margin-top: 20px;
+}
+/*div 在另外一个div中居中**/
+.center{
+    margin: 0 auto;
+}
+/* 弹出框 */
+
+.modal-box {
+    display: none;
+    position: fixed;
+    top: 50%;
+    margin-top: -100px;
+    left: 50%;
+    margin-left: -250px;
+    text-align: center;
+    width: 500px;
+    height: 200px;
+    background-color: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    z-index: 11000;
+}
+
+.modal-box .box-title {
+    margin: 40px 0;
+    font-size: 18px;
+    color: #000;
+}
+
+.modal-box .box-btn-sure {
+    display: block;
+    margin: 0 auto;
+    width: 50px;
+    height: 20px;
+    line-height: 50px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #FD460D;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}

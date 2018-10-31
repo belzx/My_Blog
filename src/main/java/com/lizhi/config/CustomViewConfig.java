@@ -1,6 +1,10 @@
-package main.java.com.lizhi.config;
+package com.lizhi.config;
 
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -11,10 +15,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class CustomViewConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/ws").setViewName("/ws");
-        registry.addViewController("/login").setViewName("/login");
-        registry.addViewController("/chat").setViewName("/chat");
-        registry.addViewController("/bootstrap").setViewName("/bootstrap");
-        registry.addViewController("/angular").setViewName("/angular");
+//        registry.addViewController("/login.html").setViewName("/admin/login");
+//        registry.addViewController("/index.html").setViewName("/admin/index");
+//        registry.addViewController("/about.html").setViewName("/admin/about");
+//        registry.addViewController("/index.html").setViewName("/admin/index");
     }
 }

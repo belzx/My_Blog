@@ -1,76 +1,99 @@
 package com.lizhi.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
-public class User implements Serializable,Cloneable{
-	private static final long serialVersionUID = -5809782578272943999L;
-	private Integer id;
-	private String username;
+public class User extends CustomEntity<String> {
+    private static final long serialVersionUID = -5809782578272943999L;
+
+    private String username;
+
     private String password;
-    private boolean remenberMe;
-    private String salt;
-    
+
+    private Date createTime;
+
+    private Date lastLoginTime;
+
+    private boolean rememberMe;
+
+    private Integer status = 1;
+
     private Set<String> role;
+
     private Set<String> permission;
-    
+
     private String ico;
-    
-    
-    
+
+    private int isLogin = 1; //0注销 1登录
+
+    public int getIsLogin() {
+        return isLogin;
+    }
+
+    public void setIsLogin(int isLogin) {
+        this.isLogin = isLogin;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public String getIco() {
-		return ico;
-	}
+        return ico;
+    }
 
-	public void setIco(String ico) {
-		this.ico = ico;
-	}
+    public void setIco(String ico) {
+        this.ico = ico;
+    }
 
-	public Set<String> getRole() {
-		return role;
-	}
+    public Set<String> getRole() {
+        return role;
+    }
 
-	public void setRole(Set<String> role) {
-		this.role = role;
-	}
+    public void setRole(Set<String> role) {
+        this.role = role;
+    }
 
-	public Set<String> getPermission() {
-		return permission;
-	}
+    public Set<String> getPermission() {
+        return permission;
+    }
 
-	public void setPermission(Set<String> permission) {
-		this.permission = permission;
-	}
+    public void setPermission(Set<String> permission) {
+        this.permission = permission;
+    }
 
-	@Override
+    @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-    
-    public String getSalt() {
-		return salt;
-	}
 
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
-
-
-
-    public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public boolean isRemenberMe() {
-        return remenberMe;
+    public boolean isRememberMe() {
+        return rememberMe;
     }
 
-    public void setRemenberMe(boolean remenberMe) {
-        this.remenberMe = remenberMe;
+    public void setRememberMe(boolean remenberMe) {
+        this.rememberMe = remenberMe;
     }
 
     public String getUsername() {
@@ -89,17 +112,16 @@ public class User implements Serializable,Cloneable{
         this.password = password;
     }
 
-	@Override
-	public String toString() {
-		return "User{" +
-				"id=" + id +
-				", username='" + username + '\'' +
-				", password='" + password + '\'' +
-				", remenberMe=" + remenberMe +
-				", salt='" + salt + '\'' +
-				", role=" + role +
-				", permission=" + permission +
-				", ico='" + ico + '\'' +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", RememberMe=" + rememberMe +
+                ", role=" + role +
+                ", permission=" + permission +
+                ", ico='" + ico + '\'' +
+                '}';
+    }
 }

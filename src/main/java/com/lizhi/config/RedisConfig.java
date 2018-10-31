@@ -1,4 +1,4 @@
-package main.java.com.lizhi.config;
+package com.lizhi.config;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ public class RedisConfig {
         CacheManager cacheManager = new RedisCacheManager(redisTemplate);
         return cacheManager;
     }
-    @Bean
+    @Bean(name = "redisTemplate")
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory){
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<String,String>();
         redisTemplate.setConnectionFactory(factory);

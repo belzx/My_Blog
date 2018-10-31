@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lizhi.mapper.BlogLabelMapper">
+  <resultMap id="blogResultMap" type="com.lizhi.bean.BlogLabel">
+    <result column="id" property="id"   javaType="String" jdbcType="VARCHAR"/>
+    <result column="lebelName" property="lebelName"   javaType="String" jdbcType="VARCHAR"/>
+    <result column="parentId" property="parentId"   javaType="String" jdbcType="VARCHAR"/>
+    <result column="articleId" property="articleId" javaType="String" jdbcType="VARCHAR"/>
+  </resultMap>
+  <cache></cache>
+  <!--用于动态生成sql所需的配置-->
+  <sql id="config">
+    <bind name="resultMapId" value="'blogResultMap'"/>
+    <bind name="tableName" value="'t_blog_label'"/>
+  </sql>
+
+  <insert id="insert" parameterType="com.lizhi.bean.BlogLabel">
+    <include refid="config"/>
+    <include refid="BasicMapper.buildInsertSql"/>
+  </insert>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+    <include refid="config"/>
+    <include refid="BasicMapper.buildBatchInsertSql"/>
+  </insert>
+
+  <delete id="deleteByPK" >
+        delete from t_blog_label where id =#{id}
+    </delete>
+
+  <select id="selectByPK"  resultMap="blogResultMap">
+		select * from t_blog_label where id = #{id}
+	</select>
+
+  <delete id="delete" parameterType="com.lizhi.bean.BlogLabel">
+    <include refid="config"/>
+    <include refid="BasicMapper.buildDeleteSql"/>
+  </delete>
+
+  <update id="update" parameterType="com.lizhi.bean.BlogLabel">
+    <include refid="config"/>
+    <include refid="BasicMapper.buildUpdateSql"/>
+  </update>
+
+  <select id="query" parameterType="com.lizhi.bean.BlogLabel" resultMap="blogResultMap">
+    <include refid="config"/>
+    <include refid="BasicMapper.buildSelectSql"/>
+  </select>
+
+  <select id="count" parameterType="com.lizhi.bean.BlogLabel" resultType="int">
+    <include refid="config"/>
+    <include refid="BasicMapper.buildTotalSql"/>
+  </select>
+</mapper>

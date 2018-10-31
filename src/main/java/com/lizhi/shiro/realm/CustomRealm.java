@@ -82,7 +82,4 @@ public class CustomRealm extends AuthorizingRealm {
 		User user = userDao.getUser(userName);
 		return  user == null? null:user.getPassword();
 	}
-
-
-
 }
